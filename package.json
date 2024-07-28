@@ -4,14 +4,15 @@
   "private": true,
   "author": "Kent C. Dodds <me@kentcdodds.com> (https://kentcdodds.com/)",
   "license": "GPL-3.0-only",
-  "homepage": "https://exercises-01-bootstrap.bookshelf.lol/",
+  "homepage": "https://exercises-02-styles.bookshelf.lol/",
   "engines": {
     "node": ">=16",
     "npm": ">=8.16.0"
   },
   "dependencies": {
     "@emotion/core": "^10.0.35",
-    "@emotion/styled": "^10.0.27",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^10.3.0",
     "@reach/dialog": "^0.17.0",
     "@reach/menu-button": "^0.17.0",
     "@reach/tabs": "^0.17.0",
