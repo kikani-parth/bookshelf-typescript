@@ -1,10 +1,10 @@
 const fs = require('fs');
 const { spawnSync, getVariants, getExtraCreditTitles } = require('./utils');
 
-const branch = spawnSync('git rev-parse --abbrev-ref HEAD');
-// if (branch === 'main') {
-//   throw new Error('Cannot run swap on main as there are no exercises.')
-// }
+// const branch = spawnSync('git rev-parse --abbrev-ref HEAD');
+// // if (branch === 'main') {
+// //   throw new Error('Cannot run swap on main as there are no exercises.')
+// // }
 
 go();
 
@@ -94,7 +94,7 @@ async function go() {
       `
 ${l((final || {}).exportLines) || '// no final'}
 
-${l(exercise.exportLines) || '// no exercise'}
+${l(exercise?.exportLines) || '// no exercise'}
 
 ${extrasLines}
       `.trim() + '\n'
