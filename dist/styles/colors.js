@@ -1,0 +1,13 @@
+export var base = 'white';
+export var text = '#434449';
+export var gray = '#f1f2f7';
+export var gray10 = '#f1f1f4';
+export var gray20 = '#e4e5e9';
+export var gray80 = '#6f7077';
+export var indigo = '#3f51b5';
+export var indigoDarken10 = '#364495';
+export var indigoLighten80 = '#b7c1f8';
+export var yellow = '#ffc107';
+export var green = '#4caf50';
+export var danger = '#ef5350';
+export var orange = 'orange';
