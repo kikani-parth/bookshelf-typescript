@@ -1,10 +1,10 @@
 const fs = require('fs');
 const { spawnSync, getVariants, getExtraCreditTitles } = require('./utils');
 
-// const branch = spawnSync('git rev-parse --abbrev-ref HEAD');
-// // if (branch === 'main') {
-// //   throw new Error('Cannot run swap on main as there are no exercises.')
-// // }
+const branch = spawnSync('git rev-parse --abbrev-ref HEAD');
+if (branch === 'main') {
+  throw new Error('Cannot run swap on main as there are no exercises.');
+}
 
 go();
 
@@ -61,16 +61,16 @@ async function go() {
   function getmainFileContents({ main, exercise, final, extras }) {
     let uncommentedLines;
     if (match === 'exercise') {
-      uncommentedLines = exercise?.exportLines;
+      uncommentedLines = exercise.exportLines;
     } else if (match === 'final') {
-      uncommentedLines = final ? final.exportLines : exercise?.exportLines;
+      uncommentedLines = final ? final.exportLines : exercise.exportLines;
     } else if (Number.isFinite(Number(match))) {
       const availableECs = extras
         .map((e) => e.number)
         .filter((n) => n <= Number(match));
       const maxEC = Math.max(...availableECs);
       const maxExtra = extras.find((e) => e.number === maxEC);
-      uncommentedLines = (maxExtra || final || exercise)?.exportLines;
+      uncommentedLines = (maxExtra || final || exercise).exportLines;
     } else {
       console.log('this should not happen...', match);
     }
@@ -94,7 +94,7 @@ async function go() {
       `
 ${l((final || {}).exportLines) || '// no final'}
 
-${l(exercise?.exportLines) || '// no exercise'}
+${l(exercise.exportLines) || '// no exercise'}
 
 ${extrasLines}
       `.trim() + '\n'
