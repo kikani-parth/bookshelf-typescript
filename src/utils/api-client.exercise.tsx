@@ -1,8 +1,11 @@
-// type CustomConfig = RequestInit; // built-in RequestInit type for fetch configurations
+// extends built-in RequestInit type for fetch configurations
+interface ConfigType extends RequestInit {
+  token?: string;
+}
 
 async function client(
   endpoint: string,
-  customConfig: RequestInit = {}
+  customConfig: ConfigType = {}
 ): Promise<any> {
   const config = {
     method: 'GET',

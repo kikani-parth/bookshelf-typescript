@@ -4,16 +4,14 @@ const apiURL = process.env.REACT_APP_API_URL;
 
 function client(
   endpoint,
-  { data, token, headers: customHeaders, ...customConfig } = {}
+  { token, headers: customHeaders, ...customConfig } = {}
 ) {
   const config = {
-    method: data ? "POST" : "GET",
+    method: "GET",
     headers: {
       Authorization: token ? `Bearer ${token}` : undefined,
       ...customHeaders,
-      "Content-Type": data ? "application/json" : undefined,
     },
-    body: data ? JSON.stringify() : undefined,
     ...customConfig,
   };
 

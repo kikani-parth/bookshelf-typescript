@@ -8,6 +8,7 @@ import * as colors from 'styles/colors';
 import * as mq from 'styles/media-queries';
 import { Dialog as ReachDialog } from '@reach/dialog';
 import { FaSpinner } from 'react-icons/fa';
+import { CustomError } from 'interfaces/error';
 
 const spin = keyframes({
   '0%': { transform: 'rotate(0deg)' },
@@ -95,6 +96,10 @@ const Dialog = styled(ReachDialog)({
   },
 });
 
+Dialog.defaultProps = {
+  'aria-label': 'dialog-box',
+};
+
 const FormGroup = styled.div({
   display: 'flex',
   flexDirection: 'column',
@@ -131,8 +136,8 @@ const errorMessageVariants = {
 };
 
 interface ErrorMessageProps {
-  error: { message: string };
-  variant: 'stacked' | 'inline';
+  error: CustomError | null;
+  variant?: 'stacked' | 'inline';
   [key: string]: any;
 }
 
@@ -154,7 +159,7 @@ function ErrorMessage({
           errorMessageVariants[variant],
         ]}
       >
-        {error.message}
+        {error ? error.message : ''}
       </pre>
     </div>
   );

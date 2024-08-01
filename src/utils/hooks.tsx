@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { CustomError } from 'interfaces/error';
 
 function useSafeDispatch<T>(dispatch: React.Dispatch<T>): React.Dispatch<T> {
   const mounted = React.useRef<boolean>(false);
@@ -23,15 +24,10 @@ function useSafeDispatch<T>(dispatch: React.Dispatch<T>): React.Dispatch<T> {
 //   run(fetchPokemon(pokemonName))
 // }, [pokemonName, run])
 
-type Error = {
-  message: string;
-  [key: string]: any; // Index signature to allow other properties
-};
-
 interface State<T> {
   status: string;
   data?: T | null;
-  error?: Error | null;
+  error: CustomError | null;
 }
 
 interface useAsyncReturnType<T> {
@@ -40,8 +36,8 @@ interface useAsyncReturnType<T> {
   isError: boolean;
   isSuccess: boolean;
   setData(data: T): void;
-  setError(error: Error): void;
-  error?: Error | null;
+  setError(error: CustomError): void;
+  error: CustomError | null;
   status: string;
   data?: T | null;
   run(promise: Promise<T>): Promise<T>;
@@ -73,7 +69,7 @@ function useAsync<T>(
     [safeSetState]
   );
   const setError = React.useCallback(
-    (error: Error) => safeSetState({ error, status: 'rejected' }),
+    (error: CustomError) => safeSetState({ error, status: 'rejected' }),
     [safeSetState]
   );
   const reset = React.useCallback(
@@ -94,7 +90,7 @@ function useAsync<T>(
           setData(data);
           return data;
         },
-        (error: Error) => {
+        (error: CustomError) => {
           setError(error);
           return Promise.reject(error);
         }
