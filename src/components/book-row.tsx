@@ -1,12 +1,27 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core';
 
-import * as mq from 'styles/media-queries'
-import * as colors from 'styles/colors'
+import * as mq from 'styles/media-queries';
+import * as colors from 'styles/colors';
 
-function BookRow({book}) {
-  const {title, author, coverImageUrl} = book
-  const id = `book-row-book-${book.id}`
+export interface Book {
+  id: string;
+  title: string;
+  author: string;
+  coverImageUrl: string;
+  pageCount: number;
+  publisher: string;
+  synopsis: string;
+}
+
+interface BookRowProps {
+  book: Book;
+}
+
+function BookRow({ book }: BookRowProps) {
+  const { title, author, coverImageUrl } = book;
+
+  const id = `book-row-book-${book.id}`;
 
   return (
     <div
@@ -19,7 +34,6 @@ function BookRow({book}) {
     >
       <div
         aria-labelledby={id}
-        to={`/book/${book.id}`}
         css={{
           minHeight: 270,
           flexGrow: 2,
@@ -48,12 +62,12 @@ function BookRow({book}) {
           <img
             src={coverImageUrl}
             alt={`${title} book cover`}
-            css={{maxHeight: '100%', width: '100%'}}
+            css={{ maxHeight: '100%', width: '100%' }}
           />
         </div>
-        <div css={{flex: 1}}>
-          <div css={{display: 'flex', justifyContent: 'space-between'}}>
-            <div css={{flex: 1}}>
+        <div css={{ flex: 1 }}>
+          <div css={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div css={{ flex: 1 }}>
               <h2
                 id={id}
                 css={{
@@ -65,7 +79,7 @@ function BookRow({book}) {
                 {title}
               </h2>
             </div>
-            <div css={{marginLeft: 10}}>
+            <div css={{ marginLeft: 10 }}>
               <div
                 css={{
                   marginTop: '0.4em',
@@ -78,13 +92,13 @@ function BookRow({book}) {
               <small>{book.publisher}</small>
             </div>
           </div>
-          <small css={{whiteSpace: 'break-spaces', display: 'block'}}>
+          <small css={{ whiteSpace: 'break-spaces', display: 'block' }}>
             {book.synopsis.substring(0, 500)}...
           </small>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export {BookRow}
+export { BookRow };

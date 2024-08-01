@@ -1,25 +1,37 @@
 /** @jsx jsx */
-import {jsx} from '@emotion/core'
+import { jsx } from '@emotion/core';
+import 'bootstrap/dist/css/bootstrap-reboot.css';
+import '@reach/dialog/styles.css';
+import * as React from 'react';
+import { createRoot } from 'react-dom/client';
+import { Button, Input, FormGroup, Spinner } from './components/lib';
+import { Modal, ModalContents, ModalOpenButton } from './components/modal';
+import { Logo } from './components/logo';
 
-import * as React from 'react'
-import {Input, Button, Spinner, FormGroup, ErrorMessage} from './components/lib'
-import {Modal, ModalContents, ModalOpenButton} from './components/modal'
-import {Logo} from './components/logo'
-import {useAsync} from './utils/hooks'
+interface LoginFormProps {
+  onSubmit(formData: { username: string; password: string }): void;
+  submitButton: React.ReactElement;
+}
 
-function LoginForm({onSubmit, submitButton}) {
-  const {isLoading, isError, error, run} = useAsync()
-  function handleSubmit(event) {
-    event.preventDefault()
-    const {username, password} = event.target.elements
+const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, submitButton }) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
-    run(
-      onSubmit({
-        username: username.value,
-        password: password.value,
-      }),
-    )
-  }
+    const elements = event.currentTarget
+      .elements as typeof event.currentTarget.elements & {
+      username?: HTMLInputElement;
+      password?: HTMLInputElement;
+    };
+
+    // Extract username and password values
+    const username = elements.username ? elements.username.value : '';
+    const password = elements.password ? elements.password.value : '';
+
+    onSubmit({
+      username: username,
+      password: password,
+    });
+  };
 
   return (
     <form
@@ -44,21 +56,22 @@ function LoginForm({onSubmit, submitButton}) {
         <Input id="password" type="password" />
       </FormGroup>
       <div>
-        {React.cloneElement(
-          submitButton,
-          {type: 'submit'},
-          ...(Array.isArray(submitButton.props.children)
-            ? submitButton.props.children
-            : [submitButton.props.children]),
-          isLoading ? <Spinner css={{marginLeft: 5}} /> : null,
-        )}
+        {React.cloneElement(submitButton, { type: 'submit' })}
+        <Spinner css={{ marginLeft: 5 }} />
       </div>
-      {isError ? <ErrorMessage error={error} /> : null}
     </form>
-  )
-}
+  );
+};
 
-function UnauthenticatedApp({login, register}) {
+function App() {
+  function login(formData: { username: string; password: string }) {
+    console.log('Login:', formData);
+  }
+
+  function register(formData: { username: string; password: string }) {
+    console.log('Register:', formData);
+  }
+
   return (
     <div
       css={{
@@ -103,7 +116,15 @@ function UnauthenticatedApp({login, register}) {
         </Modal>
       </div>
     </div>
-  )
+  );
 }
 
-export {UnauthenticatedApp}
+const rootElement = document.getElementById('root');
+
+if (rootElement) {
+  createRoot(rootElement).render(<App />);
+} else {
+  console.error('Failed to find the root element');
+}
+
+export { rootElement };
