@@ -1,14 +1,3 @@
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -45,15 +34,63 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-function client(endpoint_1) {
-    return __awaiter(this, arguments, void 0, function (endpoint, customConfig) {
+// pretend this is firebase, netlify, or auth0's code.
+// you shouldn't have to implement something like this in your own app
+var localStorageKey = '__auth_provider_token__';
+function getToken() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            // if we were a real auth provider, this is where we would make a request
+            // to retrieve the user's token. (It's a bit more complicated than that...
+            // but you're probably not an auth provider so you don't need to worry about it).
+            return [2 /*return*/, window.localStorage.getItem(localStorageKey)];
+        });
+    });
+}
+function handleUserResponse(_a) {
+    var user = _a.user;
+    window.localStorage.setItem(localStorageKey, user.token);
+    return user;
+}
+function login(_a) {
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var username = _b.username, password = _b.password;
+        return __generator(this, function (_c) {
+            return [2 /*return*/, client('login', { username: username, password: password }).then(handleUserResponse)];
+        });
+    });
+}
+function register(_a) {
+    return __awaiter(this, arguments, void 0, function (_b) {
+        var username = _b.username, password = _b.password;
+        return __generator(this, function (_c) {
+            return [2 /*return*/, client('register', { username: username, password: password }).then(handleUserResponse)];
+        });
+    });
+}
+function logout() {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            window.localStorage.removeItem(localStorageKey);
+            return [2 /*return*/];
+        });
+    });
+}
+// an auth provider wouldn't use your client, they'd have their own
+// so that's why we're not just re-using the client
+var authURL = process.env.REACT_APP_AUTH_URL;
+function client(endpoint, data) {
+    return __awaiter(this, void 0, void 0, function () {
         var config;
         var _this = this;
-        if (customConfig === void 0) { customConfig = {}; }
         return __generator(this, function (_a) {
-            config = __assign({ method: 'GET' }, customConfig);
+            config = {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: { 'Content-Type': 'application/json' },
+            };
             return [2 /*return*/, window
-                    .fetch("".concat(process.env.REACT_APP_API_URL, "/").concat(endpoint), config)
+                    .fetch("".concat(authURL, "/").concat(endpoint), config)
                     .then(function (response) { return __awaiter(_this, void 0, void 0, function () {
                     var data;
                     return __generator(this, function (_a) {
@@ -61,7 +98,6 @@ function client(endpoint_1) {
                             case 0: return [4 /*yield*/, response.json()];
                             case 1:
                                 data = _a.sent();
-                                console.log(data);
                                 if (response.ok) {
                                     return [2 /*return*/, data];
                                 }
@@ -75,4 +111,4 @@ function client(endpoint_1) {
         });
     });
 }
-export { client };
+export { getToken, login, register, logout, localStorageKey };

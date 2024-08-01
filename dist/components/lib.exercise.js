@@ -98,6 +98,9 @@ var Dialog = styled(ReachDialog)((_a = {
         margin: '10vh auto',
     },
     _a));
+Dialog.defaultProps = {
+    'aria-label': 'dialog-box',
+};
 var FormGroup = styled.div({
     display: 'flex',
     flexDirection: 'column',
@@ -128,7 +131,7 @@ function ErrorMessage(_a) {
     return (_jsxs("div", __assign({ role: "alert", css: [{ color: colors.danger }, errorMessageVariants[variant]] }, props, { children: [_jsx("span", { children: "There was an error: " }), _jsx("pre", { css: [
                     { whiteSpace: 'break-spaces', margin: '0', marginBottom: -5 },
                     errorMessageVariants[variant],
-                ], children: error.message })] })));
+                ], children: error ? error.message : '' })] })));
 }
 function FullPageErrorFallback(_a) {
     var error = _a.error;
